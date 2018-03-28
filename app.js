@@ -4,8 +4,9 @@
 
 $('form').submit(function(event) {
 	event.preventDefault();
-	var textWords = $('#user-text').val();
-	var textArray = textWords.split(' ');
+	var textWords = $('#user-text').val().toLowerCase();
+	var textNoPunctuation = textWords.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+	var textArray = textNoPunctuation.split(' ');
 	var wordCount = textArray.length;
 
 //Avg word length
@@ -26,7 +27,21 @@ $('form').submit(function(event) {
 	}
 	var avgSentenceLength = (newSum-1)/sentenceCount;
 
+// Unique word count
+	var wordObject = {};
+	for(var i = 0; i < textArray.length; i++) {
+		var word = textArray[i];
+		if(wordObject[word] == undefined) {
+			wordObject[word] = word
+		}
+	}
+	console.log(wordObject);
+	var uniqueWordCount = Object.keys(wordObject).length;
+	console.log(uniqueWordCount);
+
+
 	$('.word-count').text(wordCount);
 	$('.word-length').text(avgWordLength);
 	$('.sentence-length').text(avgSentenceLength);
+	$('.unique-count').text(uniqueWordCount);
 });
